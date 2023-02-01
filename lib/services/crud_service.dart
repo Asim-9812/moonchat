@@ -34,7 +34,8 @@ class CrudService {
           userId: post['userId'],
           id: e.id,
           comments: (post['comments'] as List).map((e) => Comment.fromJson(e)).toList(),
-          caption: post['caption']);
+          caption: post['caption'],
+          imageId: post['imageId']);
     }).toList();
   }
 
@@ -93,7 +94,7 @@ class CrudService {
         await postDb.doc(postId).update(
             { 'caption' : caption,
               'imageUrl': url,
-              'imageId': imageId,
+              'imageId': newImageId,
             }
         );
 
@@ -112,7 +113,6 @@ class CrudService {
     required String imageId,
   }) async {
     try {
-      final imageId = DateTime.now().toString();
       final ref = FirebaseInstances.firebaseStorage.ref().child(
           'postImage/$imageId');
       await ref.delete();
@@ -125,22 +125,22 @@ class CrudService {
     }
   }
 
-  static Future<Either<String, bool>> addLike({
-    required List<String> usernames,
+  static  Future<Either<String, bool>> addLike({
+    required List<String> username,
     required int like,
     required String postId
   }) async {
-    try {
+    try{
 
-
-      await postDb.doc(postId).update(
-          { 'like':{
-            'likes':like +1,
-            'usernames':FieldValue.arrayUnion(usernames)}}
+      await postDb.doc(postId).update({
+        'like':{
+          'likes': like + 1,
+          'usernames': FieldValue.arrayUnion(username)
+        }
+      }
       );
-
       return Right(true);
-    } on FirebaseException catch (err) {
+    }on FirebaseException catch(err){
       return Left(err.message!);
     }
   }

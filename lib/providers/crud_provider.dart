@@ -11,9 +11,9 @@ class CrudNotifier extends StateNotifier<CrudState> {
 
 
   Future<void> addPost({
-    String? caption,
+    required String caption,
     required String userId,
-    XFile? image
+    required XFile image
   }) async {
     state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
     final response = await CrudService.addPost(
@@ -36,6 +36,26 @@ class CrudNotifier extends StateNotifier<CrudState> {
     state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
     final response = await CrudService.delPost(
         postId: postId,
+        imageId: imageId
+    );
+    response.fold((l) {
+      state = state.copyWith(isLoad: false, errorMessage: l, isSuccess: false);
+    }, (r) {
+      state = state.copyWith(isLoad: false, errorMessage: '', isSuccess: true);
+    });
+  }
+
+  Future<void> updatePost({
+    required String caption,
+    required String postId,
+    XFile? image,
+    String? imageId
+  }) async {
+    state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
+    final response = await CrudService.updatePost(
+        caption: caption,
+        postId: postId,
+        image: image,
         imageId: imageId);
     response.fold((l) {
       state = state.copyWith(isLoad: false, errorMessage: l, isSuccess: false);
@@ -45,15 +65,15 @@ class CrudNotifier extends StateNotifier<CrudState> {
   }
 
   Future<void> addLike({
-    required List<String> usernames,
+    required List<String> username,
     required int like,
     required String postId
   }) async {
     state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
     final response = await CrudService.addLike(
-        postId: postId,
-        usernames: [],
-        like: like);
+        username: username,
+        like: like,
+        postId: postId);
     response.fold((l) {
       state = state.copyWith(isLoad: false, errorMessage: l, isSuccess: false);
     }, (r) {

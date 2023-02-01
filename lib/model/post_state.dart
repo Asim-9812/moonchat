@@ -8,14 +8,12 @@ class Like{
     required this.likes,
     required this.usernames
   });
-
   factory Like.fromJson(Map<String, dynamic> json){
     return Like(
         likes: json['likes'],
-        usernames: (json['usernames'] as List).map((e) => e as String).toList()
+        usernames:  (json['usernames'] as List).map((e) => e as String).toList()
     );
   }
-
 }
 
 class Comment{
@@ -54,7 +52,9 @@ class Post{
   final String caption;
   final String userId;
   final Like like;
+  final String imageId;
   final List<Comment> comments;
+
 
   Post({
     required this.imageUrl,
@@ -62,8 +62,8 @@ class Post{
     required this.userId,
     required this.caption,
     required this.id,
-    required this.comments
+    required this.comments,
+    required this.imageId
   });
-
 
 }
