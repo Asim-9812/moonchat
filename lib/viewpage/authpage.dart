@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../common/snackshow.dart';
 import '../providers/auth_provider.dart';
 import '../providers/toggleprovider.dart';
 
@@ -17,8 +16,6 @@ class AuthPage extends ConsumerWidget {
 
     final isLogin = ref.watch(loginProvider);
     final auth =ref.watch(authProvider);
-
-
 
     return Scaffold(
         body: Stack(
@@ -118,25 +115,26 @@ class AuthPage extends ConsumerWidget {
                       SizedBox(
                         height: 10.h,
                       ),
+
+
+
                       InkWell(
                         onTap: (){
                           _form.currentState!.save();
                           FocusScope.of(context).unfocus();
-                          if(_form.currentState!.validate()){
-
-                            if(isLogin){
+                          if(_form.currentState!.validate()) {
+                            if (isLogin) {
                               ref.read(authProvider.notifier).userLogin(
                                   email: emailController.text.trim(),
                                   password: passwordController.text.trim());
-                            }else{
-                              ref.read(authProvider.notifier).userSignUp(
-                                username: usernameController.text.trim(),
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),);
-                            }
+                            } else {
+                                ref.read(authProvider.notifier).userSignUp(
+                                  username: usernameController.text.trim(),
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim());
+                              }
+
                           }
-
-
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,

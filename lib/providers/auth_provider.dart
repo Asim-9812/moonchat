@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../common/firebase_instances.dart';
 import '../model/auth_state.dart';
 import '../services/auth_service.dart';
@@ -13,12 +14,11 @@ final userStream = StreamProvider.family.autoDispose((ref, String userId) {
   return users.doc(userId).snapshots().map((e){
     final data = e.data() as Map<String,dynamic>;
     return types.User(
-      id: e.id,
-      imageUrl: data['imageUrl'],
-      firstName: data['firstName'],
-      metadata: {
-        'email' : data['metadata']['email'],
-        'token' : data['metadata']['token']
+        id: e.id,
+        firstName: data['firstName'],
+        metadata: {
+          'email': data['metadata']['email'],
+          'token':data['metadata']['token']
       }
     );
   });
@@ -37,7 +37,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String password,
   }) async {
     state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
-    final response = await AuthService.userSignUp(username: username, email: email, password: password);
+    final response = await AuthService.userSignUp(username: username, email: email, password: password, );
     response.fold((l) {
       state = state.copyWith(isLoad: false, errorMessage: l, isSuccess: false);
     }, (r) {

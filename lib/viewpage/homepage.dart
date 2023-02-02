@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,22 +74,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                           showDialog(
                               context: context,
                               builder: (context){
-                                return AlertDialog(
-                                  backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+                                return BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: AlertDialog(
+                                    backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
 
-                                  title: Center(child: Text('Are you sure?')),
-                                  content: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      TextButton(onPressed: (){
-                                        ref.read(authProvider.notifier).userLogOut();
-                                        Navigator.pop(context);
-                                        }, child: Text('Yes',style: TextStyle(color: Colors.purple)),),
-                                      TextButton(onPressed: () {
-                                        Navigator.pop(context);
-                                        }, child: Text('No',style: TextStyle(color: Colors.purple))),
+                                    title: Center(child: Text('Are you sure?')),
+                                    content: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        TextButton(onPressed: (){
+                                          ref.read(authProvider.notifier).userLogOut();
+                                          Navigator.pop(context);
+                                          }, child: Text('Yes',style: TextStyle(color: Colors.purple)),),
+                                        TextButton(onPressed: () {
+                                          Navigator.pop(context);
+                                          }, child: Text('No',style: TextStyle(color: Colors.purple))),
 
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               }

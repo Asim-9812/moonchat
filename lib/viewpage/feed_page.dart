@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../services/crud_service.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
+import 'package:ionicons/ionicons.dart';
 
 
 
@@ -63,19 +66,42 @@ class _FeedPage extends ConsumerState<FeedPage> {
       }
     });
 
-    user.when(
-        data: (data){
-          userName = data.firstName!;
-
-        },
-      error: (err,stack)=>Center(child: Text('$err')),
-      loading: ()=>null);
+    // user.when(
+    //     data: (data){
+    //       userName = data.firstName!;
+    //       loginUser = data;
+    //
+    //     },
+    //   error: (err,stack)=>Center(child: Text('$err')),
+    //   loading: ()=>null);
 
 
     // final crud =ref.watch(crudProvider);
 
     return Scaffold(
       backgroundColor: Colors.black38,
+        drawer: Drawer(
+          child: user.when(
+            data: (data){
+              userName = data.firstName!;
+              loginUser = data;
+                      return  ListView(
+                        children: [
+                      DrawerHeader(
+                      child: Row(
+                      children: [
+
+                    Text(data.firstName!),
+                    ],
+                    )
+                    ),
+                ],
+              );
+            },
+              error: (err, stack) => Text('$err'),
+              loading: () => Center(child: CircularProgressIndicator())
+              )
+              ),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(0, 0, 0, 0.8),
         leading:
@@ -193,6 +219,7 @@ class _FeedPage extends ConsumerState<FeedPage> {
                                                              ),
                                                              InkWell(
                                                                onTap:(){
+
                                                                  Navigator.pop(context);
                                                                 Get.defaultDialog(
                                                                   title: '',
@@ -333,15 +360,18 @@ class _FeedPage extends ConsumerState<FeedPage> {
                                                         );
                                                       }
 
-                                                    }, icon: post.like.likes==2? Icon(LineIcons.heartAlt,color: Colors.purple,):
-                                                post.like.likes==1? Icon(LineIcons.heartbeat,color: Colors.purple):
-                                                Icon(LineIcons.heart,color: Colors.purple)),
+                                                    }, icon: post.like.likes==2? Icon(Ionicons.heart,color: Colors.purple,):
+                                                post.like.likes==1? Icon(Ionicons.heart_half_outline,color: Colors.purple):
+                                                Icon(Ionicons.heart_outline,color: Colors.purple)),
                                                 
                                                 IconButton(onPressed: (){
+
+                                                  // Get.to(()=> DetailPage(post, loginUser));
+
                                                   showDialog(
                                                       context: context,
                                                       builder: (_){
-                                                        return CommentList();
+                                                        return DetailPage(post, loginUser);
                                                       }
                                                   );
                                                 }, icon: Icon(LineIcons.comments,color: Colors.purple,))

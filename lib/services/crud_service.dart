@@ -33,37 +33,38 @@ class CrudService {
           like: Like.fromJson(post['like']),
           userId: post['userId'],
           id: e.id,
-          comments: (post['comments'] as List).map((e) => Comment.fromJson(e)).toList(),
           caption: post['caption'],
-          imageId: post['imageId']);
+          imageId: post['imageId'],
+          comments: (post['comments'] as List).map((e) => Comment.fromJson(e)).toList()
+
+      );
     }).toList();
   }
 
-  static Future<Either<String, bool>> addPost({
-    String? caption,
+  static  Future<Either<String, bool>> addPost({
+    required String caption,
     required String userId,
-    XFile? image
+    required XFile image
   }) async {
-    try {
+    try{
+
       final imageId = DateTime.now().toString();
-      final ref = FirebaseInstances.firebaseStorage.ref().child(
-          'postImage/$imageId');
-      if (image != null) await ref.putFile(File(image.path));
+      final ref = FirebaseInstances.firebaseStorage.ref().child('postImage/$imageId');
+      await ref.putFile(File(image.path));
       final url = await ref.getDownloadURL();
       await postDb.add({
-        'caption' : caption,
+        'caption':caption,
         'imageUrl': url,
         'userId': userId,
-        'imageId':imageId,
-        'comments':[],
-        'like':{
-          'likes':0,
-          'usernames':[]
+        'imageId': imageId,
+        'comments': [],
+        'like': {
+          'likes': 0,
+          'usernames': []
         }
       });
-
       return Right(true);
-    } on FirebaseException catch (err) {
+    }on FirebaseException catch(err){
       return Left(err.message!);
     }
   }
@@ -145,23 +146,21 @@ class CrudService {
     }
   }
 
-  static Future<Either<String, bool>> addComment({
+  static  Future<Either<String, bool>> addComment({
     required List<Comment> comments,
     required String postId
   }) async {
-    try {
+    try{
 
-
-      await postDb.doc(postId).update(
-          {
-            'comments': comments.map((e) => e.toJson()).toList()
-          }
+      await postDb.doc(postId).update({
+        'comments': comments.map((e) => e.toJson()).toList()
+      }
       );
-
       return Right(true);
-    } on FirebaseException catch (err) {
+    }on FirebaseException catch(err){
       return Left(err.message!);
     }
   }
+
 
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,75 +54,81 @@ class _UpdateCaptionState extends ConsumerState<UpdateCaption> {
 
     final image1 =ref.watch(imageProvider);
     final crud1 =ref.watch(crudProvider);
-    return AlertDialog(
-      backgroundColor: Color.fromRGBO(0, 0, 0, 0.7),
-      content: Container(
-        // height: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text('Edit Post',style: TextStyle(fontSize: 25.sp),)),
-            Divider(
-              color: Colors.white30,  //color of divider
-              thickness: 1,
-            ),
-            Stack(
-                children: [
-                  Form(
-                    key: _form1,
-                    child: TextFormField(
-                        controller: captionController2,
-                        validator:(val){
-                          if(val!.isEmpty){
-                            return '';
-                          }
-                          return null;
-                        },
-                        style: TextStyle(color: Colors.white,fontSize: 20.sp),
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: AlertDialog(
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0.7),
+        content: Container(
+          // height: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 25.sp,fontStyle: FontStyle.italic,fontWeight: FontWeight.bold),),
+                  )),
+              Divider(
+                color: Colors.white30,  //color of divider
+                thickness: 1,
+              ),
+              Stack(
+                  children: [
+                    Form(
+                      key: _form1,
+                      child: TextFormField(
+                          controller: captionController2,
+                          validator:(val){
+                            if(val!.isEmpty){
+                              return '';
+                            }
+                            return null;
+                          },
+                          style: TextStyle(color: Colors.white,fontSize: 20.sp),
 
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(top:0,left: 10,bottom: 0,right: 40),
-                            enabledBorder: OutlineInputBorder(),
-                            fillColor: Color.fromRGBO(255, 255, 255, 0.2),
-                            filled: true,
-                            hintText: 'Edit Caption', hintStyle: TextStyle(color: Colors.grey,fontSize: 20.sp)
-                        )
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(top:0,left: 10,bottom: 0,right: 40),
+                              enabledBorder: OutlineInputBorder(),
+                              fillColor: Color.fromRGBO(255, 255, 255, 0.2),
+                              filled: true,
+                              hintText: 'Edit...', hintStyle: TextStyle(color: Colors.grey,fontSize: 20.sp)
+                          )
+                      ),
                     ),
-                  ),
 
 
-                ]
-            ),
+                  ]
+              ),
 
 
-          ],
+            ],
+          ),
         ),
-      ),
-      actionsAlignment: MainAxisAlignment.spaceAround,
-      actions: [
-        TextButton(onPressed: (){
-          _form1.currentState!.save();
-          FocusScope.of(context).unfocus();
-          if(_form1.currentState!.validate()) {
+        actionsAlignment: MainAxisAlignment.spaceAround,
+        actions: [
+          TextButton(onPressed: (){
+            _form1.currentState!.save();
+            FocusScope.of(context).unfocus();
+            if(_form1.currentState!.validate()) {
 
-            ref.read(crudProvider.notifier).updatePost(
-                caption: captionController2.text.trim(),
-                postId: widget.post.id);
+              ref.read(crudProvider.notifier).updatePost(
+                  caption: captionController2.text.trim(),
+                  postId: widget.post.id);
+              Navigator.pop(context);
+
+
+
+            }
+          }, child: crud1.isLoad? Center(child: CircularProgressIndicator(),) :
+          Text('Update',style: TextStyle(fontSize: 20.sp,color: Colors.purpleAccent,fontWeight: FontWeight.bold),)),
+
+
+          TextButton(onPressed: (){
             Navigator.pop(context);
-
-
-
-          }
-        }, child: crud1.isLoad? Center(child: CircularProgressIndicator(),) :
-        Text('Update',style: TextStyle(fontSize: 20.sp,color: Colors.white),)),
-
-
-        TextButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: Text('Cancel',style: TextStyle(fontSize: 20.sp,color: Colors.white))),
-      ],
+          }, child: Text('Cancel',style: TextStyle(fontSize: 20.sp,color: Colors.purple,fontWeight: FontWeight.bold))),
+        ],
+      ),
     );
   }
 }

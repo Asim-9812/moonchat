@@ -26,7 +26,7 @@ class AuthService {
       await FirebaseChatCore.instance.createUserInFirestore(
         types.User(
             firstName: username,
-            id: response.user!.uid,
+            id:  response.user!.uid,
             lastName: '',
             metadata:  {
               'email': email,
@@ -60,7 +60,6 @@ class AuthService {
       return Left(err.message!);
     }
   }
-
 
   static Future<Either<String, bool>> userLogOut() async {
     try {
