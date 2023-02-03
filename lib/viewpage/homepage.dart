@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moon_chat/providers/auth_provider.dart';
-import 'package:moon_chat/viewpage/chatpage.dart';
+import 'package:moon_chat/viewpage/unlock_chat.dart';
 import 'package:moon_chat/viewpage/feed_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
   List pages=[
     FeedPage(),
-    ChatPage()
+    UnlockPage()
   ];
 
   int _selectedIndex=0;
@@ -36,11 +36,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   }
 
 
-  // void onTap(int index){
-  //   setState(() {
-  //     currentIndex = index;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +54,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                       children: [
 
                         FeedPage(),
-                        ChatPage(),
+                        UnlockPage(),
                       ],
 
                     ),

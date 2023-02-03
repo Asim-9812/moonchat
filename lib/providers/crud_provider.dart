@@ -5,7 +5,7 @@ import '../model/crud_state.dart';
 import '../model/post_state.dart';
 import '../services/crud_service.dart';
 
-final crudProvider = StateNotifierProvider.autoDispose<CrudNotifier, CrudState>((ref) => CrudNotifier(CrudState.empty()));
+final crudProvider = StateNotifierProvider<CrudNotifier, CrudState>((ref) => CrudNotifier(CrudState.empty()));
 
 class CrudNotifier extends StateNotifier<CrudState> {
   CrudNotifier(super.state);
