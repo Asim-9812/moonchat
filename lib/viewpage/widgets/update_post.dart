@@ -52,7 +52,6 @@ class _UpdateCaptionState extends ConsumerState<UpdateCaption> {
       }
     });
 
-    final image1 =ref.watch(imageProvider);
     final crud1 =ref.watch(crudProvider);
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -121,7 +120,7 @@ class _UpdateCaptionState extends ConsumerState<UpdateCaption> {
 
             }
           }, child: crud1.isLoad? Center(child: CircularProgressIndicator(),) :
-          Text('Update',style: TextStyle(fontSize: 20.sp,color: Colors.purpleAccent,fontWeight: FontWeight.bold),)),
+          Text('Update',style: TextStyle(fontSize: 20.sp,color: Colors.purple,fontWeight: FontWeight.bold),)),
 
 
           TextButton(onPressed: (){

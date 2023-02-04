@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import '../../model/post_state.dart';
 import '../../providers/crud_provider.dart';
 import '../../services/crud_service.dart';
@@ -21,8 +20,7 @@ class DetailPage extends ConsumerWidget {
   final commentController = TextEditingController();
 
   @override
-  Widget build(BuildContext context, ref) {
-    final crud = ref.watch(crudProvider);
+    Widget build(BuildContext context, ref) {
     final postData = ref.watch(postStream);
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -53,30 +51,38 @@ class DetailPage extends ConsumerWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: userPost.comments.map((e) {
                                   return Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: ListTile(
-                                      // tileColor: Colors.white12,
-                                      title: Text(e.comment,style: TextStyle(color: Colors.white,fontSize: 20.sp,fontStyle: FontStyle.italic,fontWeight: FontWeight.bold)),
-                                      subtitle:Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                          Text(e.username,style: TextStyle(color: Colors.purple,fontSize: 15.sp)),
-                                          SizedBox(
-                                            height: 5.h,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                            child: Divider(
-                                              // thickness: 1,
-                                              height: 1,
-                                              color: Colors.white,
-                                            ),
-                                          )
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Container(
+                                      color: Colors.white10,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ListTile(
+                                          // tileColor: Colors.white12,
+                                          title: Text(e.comment,style: TextStyle(color: Colors.white,fontSize: 25.sp,fontWeight: FontWeight.bold)),
+                                          subtitle:Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
 
-                                        ],
+                                              Divider(
+                                                // thickness: 1,
+                                                height: 1,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
+                                              Text(e.username,style: TextStyle(color: Colors.purple,fontStyle: FontStyle.italic,fontSize: 18.sp)),
+                                              SizedBox(
+                                                height: 5.h,
+                                              ),
+
+
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   );
@@ -142,6 +148,7 @@ class DetailPage extends ConsumerWidget {
                                     );
 
                                     commentController.clear();
+                                    // Navigator.pop(context);
 
                                   }
                                 }

@@ -1,14 +1,9 @@
-
-
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
-
+// import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../common/firebase_instances.dart';
 import '../model/post_state.dart';
 
@@ -90,8 +85,8 @@ class CrudService {
         final newImageId = DateTime.now().toString();
         final ref1 = FirebaseInstances.firebaseStorage.ref().child(
             'postImage/$newImageId');
-        await ref.putFile(File(image.path));
-        final url = await ref.getDownloadURL();
+        await ref1.putFile(File(image.path));
+        final url = await ref1.getDownloadURL();
         await postDb.doc(postId).update(
             { 'caption' : caption,
               'imageUrl': url,

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,10 +11,8 @@ import 'package:moon_chat/viewpage/widgets/comments.dart';
 import 'package:moon_chat/viewpage/widgets/create_post.dart';
 import 'package:moon_chat/viewpage/widgets/update_post.dart';
 import '../common/snackshow.dart';
-import '../model/post_state.dart';
 import '../providers/crud_provider.dart';
 import '../providers/toggleprovider.dart';
-import 'dart:io';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../services/crud_service.dart';
 import 'package:line_icons/line_icons.dart';
@@ -52,12 +49,8 @@ class _FeedPage extends ConsumerState<FeedPage> {
   @override
   Widget build(BuildContext context) {
 
-
     final user = ref.watch(userStream(auth!));
 
-
-
-    final users= ref.watch(usersStream);
     final postData = ref.watch(postStream);
 
     ref.listen(crudProvider, (previous, next) {
@@ -65,20 +58,19 @@ class _FeedPage extends ConsumerState<FeedPage> {
         SnackShow.showFailure(context, next.errorMessage);
       }
     });
+    user.when(
+        data: (data){
+          userName = data.firstName!;
+          loginUser = data;
+        },
+        error: (err, stack) => Text('$err'),
+        loading: () => Center(child: CircularProgressIndicator())
+    );
 
     return Scaffold(
       // extendBodyBehindAppBar: true,
       backgroundColor: Colors.black38,
-      drawer: Drawer(
-          child: user.when(
-              data: (data){
-                userName = data.firstName!;
-                loginUser = data;
-              },
-              error: (err, stack) => Text('$err'),
-              loading: () => Center(child: CircularProgressIndicator())
-          )
-      ),
+
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -95,6 +87,43 @@ class _FeedPage extends ConsumerState<FeedPage> {
             },
             icon: Icon(Icons.add_box,size: 25.sp,color: Colors.white,)
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context){
+                      return BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: AlertDialog(
+                          backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
+
+                          title: Center(child: Text('Are you sure?')),
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(onPressed: (){
+                                ref.read(authProvider.notifier).userLogOut();
+                                Navigator.pop(context);
+                              }, child: Text('Yes',style: TextStyle(color: Colors.purple)),),
+                              TextButton(onPressed: () {
+                                Navigator.pop(context);
+                              }, child: Text('No',style: TextStyle(color: Colors.purple))),
+
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                );
+              },
+              child: Icon(
+                Icons.logout, color: Colors.white54, size: 25.w,),
+            ),
+          )
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -106,18 +135,16 @@ class _FeedPage extends ConsumerState<FeedPage> {
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
-
-
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     height: 150.h,
                     width: 380.w,
+
                     decoration: new BoxDecoration(
                         color: Colors.black.withOpacity(0.5)),
+
                   ),
                 ),
               ),
@@ -357,14 +384,14 @@ class _FeedPage extends ConsumerState<FeedPage> {
 
                                                     IconButton(onPressed: (){
 
-                                                      Get.to(()=> DetailPage(post, loginUser));
+                                                      // Get.to(()=> DetailPage(post, loginUser));
 
-                                                      // showDialog(
-                                                      //     context: context,
-                                                      //     builder: (_){
-                                                      //       return DetailPage(post, loginUser);
-                                                      //     }
-                                                      // );
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (_){
+                                                            return DetailPage(post, loginUser);
+                                                          }
+                                                      );
                                                     }, icon: Icon(LineIcons.comments,color: Colors.purple,))
 
 
@@ -386,8 +413,17 @@ class _FeedPage extends ConsumerState<FeedPage> {
                       )
                   ),
                 ),
+              ),
+
+
+
+
+
+              SizedBox(
+                  height: 55.h
               )
-            ]
+
+    ]
         ),
       ),
     );

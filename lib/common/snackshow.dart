@@ -21,6 +21,7 @@ class SnackShow{
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+
           content: Text(message),
           duration: Duration(seconds: 1),
         )

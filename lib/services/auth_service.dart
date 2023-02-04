@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
@@ -46,6 +43,7 @@ class AuthService {
     required String password
   }) async {
     try{
+
 
       final token = await FirebaseInstances.firebaseMessaging.getToken();
       final response  = await FirebaseInstances.firebaseAuth.signInWithEmailAndPassword(email: email, password: password);

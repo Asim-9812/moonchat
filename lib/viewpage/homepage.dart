@@ -1,24 +1,21 @@
-import 'dart:ui';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:moon_chat/providers/auth_provider.dart';
-import 'package:moon_chat/viewpage/unlock_chat.dart';
+import 'package:moon_chat/viewpage/locked_page.dart';
 import 'package:moon_chat/viewpage/feed_page.dart';
+import 'package:moon_chat/viewpage/widgets/lock_chat.dart';
 
-class HomePage extends StatefulWidget {
+import '../services/notification_service.dart';
+
+class HomePage extends ConsumerStatefulWidget {
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
+class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMixin{
 
-  List pages=[
-    FeedPage(),
-    UnlockPage()
-  ];
 
   int _selectedIndex=0;
   late PageController _pageController;
@@ -27,6 +24,58 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
   void initState() {
     super.initState();
     _pageController = PageController();
+
+    // 1. This method call when app in terminated state and you get a notification
+    // when you click on notification app open from terminated state and you can get notification data in this method
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+          (message) {
+        print("FirebaseMessaging.instance.getInitialMessage");
+        if (message != null) {
+          print("New Notification");
+          // if (message.data['_id'] != null) {
+          //   Navigator.of(context).push(
+          //     MaterialPageRoute(
+          //       builder: (context) => DemoScreen(
+          //         id: message.data['_id'],
+          //       ),
+          //     ),
+          //   );
+          // }
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+
+    // 2. This method only call when App in forground it mean app must be opened
+    // FirebaseMessaging.onMessage.listen(
+    //       (message) {
+    //     print("FirebaseMessaging.onMessage.listen");
+    //     if (message.notification != null) {
+    //       print(message.notification!.title);
+    //       print(message.notification!.body);
+    //       print("message.data11 ${message.data}");
+    //       LocalNotificationService.createanddisplaynotification(message);
+    //
+    //     }
+    //   },
+    // );
+
+    // 3. This method only call when App in background and not terminated(not closed)
+    FirebaseMessaging.onMessageOpenedApp.listen(
+          (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+          LocalNotificationService.createanddisplaynotification(message);
+        }
+      },
+    );
+
+    // getToken();
+
   }
 
   @override
@@ -39,69 +88,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+
           return Scaffold(
               extendBody: true,
-              body: Stack(
-                children: [
-                  SizedBox.expand(
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() => _selectedIndex = index);
-                      },
-                      children: [
+              body:  SizedBox.expand(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() => _selectedIndex = index);
+                  },
+                  children: [
 
-                        FeedPage(),
-                        UnlockPage(),
-                      ],
+                    FeedPage(),
+                    LockedPage(),
+                  ],
 
-                    ),
-                  ),
-
-                  //log out...
-                  Positioned(
-                      right: 10.w,
-                      top: 45.h,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context){
-                                return BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                  child: AlertDialog(
-                                    backgroundColor: Color.fromRGBO(0, 0, 0, 0.9),
-
-                                    title: Center(child: Text('Are you sure?')),
-                                    content: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        TextButton(onPressed: (){
-                                          ref.read(authProvider.notifier).userLogOut();
-                                          Navigator.pop(context);
-                                          }, child: Text('Yes',style: TextStyle(color: Colors.purple)),),
-                                        TextButton(onPressed: () {
-                                          Navigator.pop(context);
-                                          }, child: Text('No',style: TextStyle(color: Colors.purple))),
-
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                          );
-                        },
-                        child: Icon(
-                          Icons.logout, color: Colors.white54, size: 25.w,),
-                      )
-                  ),
-
-                  
-
-                  // pages[currentIndex]
-                ],
+                ),
               ),
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: _selectedIndex,
@@ -131,25 +133,38 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
               )
 
           );
+  }
+
+void _onItemTapped(int index) {
+
+  if(_selectedIndex == 0)
+  {
+
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_){
+
+          return WillPopScope(
+              onWillPop: () async => false,
+              child: ButtonPress());
         }
     );
   }
 
-  void _onItemTapped(int index) {
 
-    setState(() {
-      _selectedIndex = index;
-      //
-      //
-      //using this page controller you can make beautiful animation effects
-      _pageController.animateToPage(index,
-          duration: Duration(milliseconds: 500), curve: Curves.easeOut);
-    });
-
-  }
+  setState(() {
+    _selectedIndex = index;
+    //
+    //
+    //using this page controller you can make beautiful animation effects
+    _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 500), curve: Curves.easeOut);
+  });
 
 }
 
+}
 
 
 
