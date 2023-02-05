@@ -117,8 +117,8 @@ class _FeedState extends ConsumerState<Feed> {
               }
 
             }
-          }, child: crud.isLoad? Center(child: CircularProgressIndicator(),) :
-          Text('Post',style: TextStyle(fontSize: 20.sp,color: Colors.white),)),
+          }, child:
+            Text('Post',style: TextStyle(fontSize: 20.sp,color: Colors.white),)),
 
 
           TextButton(onPressed: (){

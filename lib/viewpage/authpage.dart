@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../common/snackshow.dart';
 import '../providers/auth_provider.dart';
 import '../providers/toggleprovider.dart';
 
@@ -15,6 +19,7 @@ class AuthPage extends ConsumerWidget {
   Widget build(BuildContext context,ref) {
 
     final isLogin = ref.watch(loginProvider);
+    final image = ref.watch(imageProvider);
     final auth =ref.watch(authProvider);
 
     return Scaffold(
@@ -29,16 +34,36 @@ class AuthPage extends ConsumerWidget {
               ),
             ),
             Positioned(
-              top: 270.h,
-              left: 50.w,
+              top: isLogin? 270.h:107.h,
+              left: isLogin ? 50.w :46.w ,
               child: Form(
                 key: _form,
                 child: Container(
                   // color: Colors.white,
                   width: 300.w,
-                  height: 270.h,
+                  height: isLogin? 270.h : 380.h,
                   child: Column(
                     children: [
+
+                      if(!isLogin)   InkWell(
+                        onTap: (){
+                          ref.read(imageProvider.notifier).pickAnImage();
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Container(
+
+                            height: 150.h,
+                            width: 150.w,
+                            color: Colors.black.withOpacity(0.2),
+                            child: image == null ? Center(child: Text('select an image', style: TextStyle(color: Colors.white),)) : Image.file(File(image.path),fit: BoxFit.cover,),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+
                       if(!isLogin) TextFormField(
                           controller: usernameController,
                           validator:(val){
@@ -127,11 +152,20 @@ class AuthPage extends ConsumerWidget {
                               ref.read(authProvider.notifier).userLogin(
                                   email: emailController.text.trim(),
                                   password: passwordController.text.trim());
-                            } else {
+                            }
+                              else if (image == null) {
+                                SnackShow.showFailure(
+                                    context, 'please select an image');
+                              } else {
                                 ref.read(authProvider.notifier).userSignUp(
                                   username: usernameController.text.trim(),
                                   email: emailController.text.trim(),
-                                  password: passwordController.text.trim());
+                                  password: passwordController.text.trim(),
+                                    image: image);
+                                Timer(Duration(milliseconds: 500), () {
+                                  ref.invalidate(imageProvider);
+                                });
+
                               }
 
                           }

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../common/firebase_instances.dart';
 
@@ -16,14 +19,26 @@ class AuthService {
     required String username,
     required String email,
     required String password,
+    required XFile image,
+    XFile? image2
   }) async {
     try{
       final response  = await FirebaseInstances.firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       final token = await FirebaseInstances.firebaseMessaging.getToken();
+      final imageId = DateTime.now().toString();
+      final ref = FirebaseInstances.firebaseStorage.ref().child('userImage/$imageId');
+      await ref.putFile(File(image.path));
+      final url = await ref.getDownloadURL();
+      final imageId2 = DateTime.now().toString();
+      final ref2 = FirebaseInstances.firebaseStorage.ref().child('userImage/wallpaper/$imageId2');
+      await ref2.putFile(File(image.path));
+      final url2 = await ref2.getDownloadURL();
       await FirebaseChatCore.instance.createUserInFirestore(
         types.User(
             firstName: username,
             id:  response.user!.uid,
+            imageUrl: url,
+            imageUrl2 : url2,
             lastName: '',
             metadata:  {
               'email': email,
@@ -36,6 +51,7 @@ class AuthService {
       return Left(err.message!);
     }
   }
+
 
 
   static  Future<Either<String, bool>> userLogin({
@@ -67,4 +83,8 @@ class AuthService {
       return Left(err.message!);
     }
   }
+
+
+
+
 }

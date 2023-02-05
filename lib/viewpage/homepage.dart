@@ -2,6 +2,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:moon_chat/main.dart';
 import 'package:moon_chat/viewpage/locked_page.dart';
 import 'package:moon_chat/viewpage/feed_page.dart';
 import 'package:moon_chat/viewpage/widgets/lock_chat.dart';
@@ -93,6 +95,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
               extendBody: true,
               body:  SizedBox.expand(
                 child: PageView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   onPageChanged: (index) {
                     setState(() => _selectedIndex = index);
@@ -140,6 +143,7 @@ void _onItemTapped(int index) {
   if(_selectedIndex == 0)
   {
 
+
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -151,6 +155,7 @@ void _onItemTapped(int index) {
         }
     );
   }
+
 
 
   setState(() {

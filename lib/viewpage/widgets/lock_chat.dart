@@ -2,8 +2,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:moon_chat/viewpage/feed_page.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/toggleprovider.dart';
+import 'package:get/get.dart';
+
+import '../homepage.dart';
 
 
 
@@ -60,30 +64,37 @@ class ButtonPress extends  ConsumerWidget {
               Container(
                 // color: Colors.blue,
                 height: 50.h,
-                width: 100.w,
+                width: 200.w,
                 child: users.when(
                     data: (data) {
                       return ListView.builder(
                           itemCount: data.length,
                           itemBuilder: (context, index){
                             return
-                              TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.black,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.black,
 
-                                  ),
-                                  onPressed: (){
-                                ref.read(loginProvider.notifier).change();
+                                      ),
+                                      onPressed: (){
+                                    ref.read(loginProvider.notifier).change();
 
-                                FocusScope.of(context).unfocus();
-                                if(_form1.currentState!.validate()){
-                                  if(passwordController.text.trim()=='1901'){
-                                    Navigator.pop(context);
-                                    passwordController.clear();
-                                  }
-                                }
-                              },
-                                  child: Text('Enter',style: TextStyle(color: Colors.white,fontSize: 20.sp,fontWeight: FontWeight.bold)));
+                                    FocusScope.of(context).unfocus();
+                                    if(_form1.currentState!.validate()){
+                                      if(passwordController.text.trim()=='1901'){
+                                        Navigator.pop(context);
+                                        passwordController.clear();
+                                      }
+                                    }
+                                  },
+                                      child: Text('Enter',style: TextStyle(color: Colors.white,fontSize: 20.sp,fontWeight: FontWeight.bold))),
+
+
+                                ],
+                              );
 
                           }
 
