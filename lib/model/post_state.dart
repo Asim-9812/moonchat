@@ -62,3 +62,18 @@ class Post{
 
 }
 
+class Wall{
+  final String id;
+  late final String imageUrl;
+  final String userId;
+  final String imageId;
+
+
+  Wall({
+    required this.imageUrl,
+    required this.userId,
+    required this.id,
+    required this.imageId
+  });
+
+}

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:moon_chat/model/post_state.dart';
 import 'package:moon_chat/viewpage/statuspage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase_options.dart';
@@ -35,6 +36,8 @@ InitializationSettings(
 
 
 void main() async {
+
+
 
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(Duration(milliseconds: 50));

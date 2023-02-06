@@ -36,7 +36,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String username,
     required String email,
     required String password,
-    required XFile image
+    required XFile image,
   }) async {
     state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
     final response = await AuthService.userSignUp(username: username, email: email, password: password, image: image);

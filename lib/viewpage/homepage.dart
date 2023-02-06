@@ -8,9 +8,11 @@ import 'package:moon_chat/viewpage/locked_page.dart';
 import 'package:moon_chat/viewpage/feed_page.dart';
 import 'package:moon_chat/viewpage/widgets/lock_chat.dart';
 
+import '../model/post_state.dart';
 import '../services/notification_service.dart';
 
 class HomePage extends ConsumerStatefulWidget {
+
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();

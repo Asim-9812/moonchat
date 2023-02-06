@@ -18,6 +18,8 @@ import '../../providers/toggleprovider.dart';
 
 class UpdateCaption extends ConsumerStatefulWidget {
 
+
+
   final Post post;
   UpdateCaption(this.post);
 

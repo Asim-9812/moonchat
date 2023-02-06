@@ -161,7 +161,8 @@ class AuthPage extends ConsumerWidget {
                                   username: usernameController.text.trim(),
                                   email: emailController.text.trim(),
                                   password: passwordController.text.trim(),
-                                    image: image);
+                                    image: image,
+                                );
                                 Timer(Duration(milliseconds: 500), () {
                                   ref.invalidate(imageProvider);
                                 });

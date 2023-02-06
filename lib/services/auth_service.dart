@@ -20,7 +20,6 @@ class AuthService {
     required String email,
     required String password,
     required XFile image,
-    XFile? image2
   }) async {
     try{
       final response  = await FirebaseInstances.firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
@@ -29,16 +28,12 @@ class AuthService {
       final ref = FirebaseInstances.firebaseStorage.ref().child('userImage/$imageId');
       await ref.putFile(File(image.path));
       final url = await ref.getDownloadURL();
-      final imageId2 = DateTime.now().toString();
-      final ref2 = FirebaseInstances.firebaseStorage.ref().child('userImage/wallpaper/$imageId2');
-      await ref2.putFile(File(image.path));
-      final url2 = await ref2.getDownloadURL();
+
       await FirebaseChatCore.instance.createUserInFirestore(
         types.User(
             firstName: username,
             id:  response.user!.uid,
             imageUrl: url,
-            imageUrl2 : url2,
             lastName: '',
             metadata:  {
               'email': email,

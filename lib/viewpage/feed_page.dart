@@ -8,10 +8,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:moon_chat/common/firebase_instances.dart';
 import 'package:moon_chat/providers/auth_provider.dart';
+import 'package:moon_chat/viewpage/test.dart';
 import 'package:moon_chat/viewpage/user_detail.dart';
 import 'package:moon_chat/viewpage/widgets/comments.dart';
 import 'package:moon_chat/viewpage/widgets/update_post.dart';
 import '../common/snackshow.dart';
+import '../model/post_state.dart';
 import '../providers/crud_provider.dart';
 import '../providers/toggleprovider.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -23,6 +25,7 @@ import 'package:ionicons/ionicons.dart';
 
 
 class FeedPage extends ConsumerStatefulWidget {
+
 
   @override
   ConsumerState<FeedPage> createState() => _FeedPage();

@@ -10,6 +10,7 @@ import 'package:moon_chat/viewpage/user_detail.dart';
 import 'package:moon_chat/viewpage/widgets/tranisition.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../common/firebase_instances.dart';
+import '../model/post_state.dart';
 import '../providers/auth_provider.dart';
 import '../providers/room_provider.dart';
 import 'chat_page.dart';
@@ -96,45 +97,50 @@ class LockedPage extends ConsumerWidget {
                               onTap: (){
                                 Get.to(() => UserDetail(data[index]), transition: Transition.leftToRight);
                               },
-                              child: Container(
-                                decoration: new BoxDecoration(
-                                    color: Colors.black.withOpacity(0.5)),
-                                height: 100.h,
-                                width: 350.w,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                    child: Row(
-                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 35,
-                                          backgroundImage: CachedNetworkImageProvider(data[index].imageUrl!),
-                                        ),
-                                        SizedBox(width: 15.w,),
-                                        Text(data[index].firstName!,style: TextStyle(color: Colors.white,fontSize: 25.sp,fontWeight: FontWeight.bold),),
-                                        SizedBox(width: 100.w,),
-                                        // IconButton(onPressed: (){},
-                                        //     icon: Icon(LineIcons.phoneVolume,color: Colors.white,size: 20.sp,)),
-                                        // SizedBox(width: 10.w,),
-                                        IconButton(onPressed: () async {
-
-                                          final response = await ref.read(roomProvider).roomCreate(data[index]);
-                                          if(response != null){
-                                            Navigator.push(context,
-                                                CupertinoRoute(exitPage: LockedPage(), enterPage: ChatPage(response, data[index].metadata!['token'], data[index].firstName!))
-                                            );
-                                          }
+                              child: Stack(
+                                children:[ Container(
+                                  decoration: new BoxDecoration(
+                                      color: Colors.black.withOpacity(0.5)),
+                                  height: 100.h,
+                                  width: 350.w,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                      child: Row(
+                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 35,
+                                            backgroundImage: CachedNetworkImageProvider(data[index].imageUrl!),
+                                          ),
+                                          SizedBox(width: 15.w,),
+                                          Text(data[index].firstName!,style: TextStyle(color: Colors.white,fontSize: 25.sp,fontWeight: FontWeight.bold),),
 
 
-
-                                        },icon: Icon(Ionicons.chatbubble_ellipses_outline,color: Colors.white,size: 30.sp,))
-
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
+
+                                  Positioned(
+                                    right: 20.w,
+                                    top: 10.h,
+                                    child: IconButton(onPressed: () async {
+
+                                      final response = await ref.read(roomProvider).roomCreate(data[index]);
+                                      if(response != null){
+                                        Navigator.push(context,
+                                            CupertinoRoute(exitPage: LockedPage(), enterPage: ChatPage(response, data[index].metadata!['token'], data[index].firstName!))
+                                        );
+                                      }
+
+
+
+                                    },icon: Icon(Ionicons.chatbubble_ellipses_outline,color: Colors.white,size: 30.sp,)),
+                                  )
+                                ]
                               ),
                             );
                           }
