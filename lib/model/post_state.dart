@@ -4,14 +4,17 @@ class Like{
   final int likes;
   final List<String> usernames;
 
+
   Like({
     required this.likes,
-    required this.usernames
+    required this.usernames,
+
   });
   factory Like.fromJson(Map<String, dynamic> json){
     return Like(
         likes: json['likes'],
-        usernames:  (json['usernames'] as List).map((e) => e as String).toList()
+        usernames:  (json['usernames'] as List).map((e) => e as String).toList(),
+
     );
   }
 }
@@ -19,13 +22,15 @@ class Like{
 class Comment{
   final String username;
   final String comment;
+  final String dateTime;
 
-  Comment({required this.username, required this.comment});
+  Comment({required this.username, required this.comment,required this.dateTime});
 
   factory Comment.fromJson(Map<String, dynamic> json){
     return  Comment(
         comment:  json['comment'],
-        username: json['username']
+        username: json['username'],
+        dateTime: json['dateTime']
     );
   }
 
@@ -33,7 +38,8 @@ class Comment{
   Map<String, dynamic> toJson(){
     return {
       'comment': this.comment,
-      'username': this.username
+      'username': this.username,
+      'dateTime' : this.dateTime
     };
   }
 

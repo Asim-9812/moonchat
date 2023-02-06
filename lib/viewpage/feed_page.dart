@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:moon_chat/common/firebase_instances.dart';
 import 'package:moon_chat/providers/auth_provider.dart';
+import 'package:moon_chat/viewpage/post_details.dart';
 import 'package:moon_chat/viewpage/test.dart';
 import 'package:moon_chat/viewpage/user_detail.dart';
 import 'package:moon_chat/viewpage/widgets/comments.dart';
@@ -159,19 +160,19 @@ class _FeedPage extends ConsumerState<FeedPage> {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 140.h,
-                      width: 380.w,
-
-                      decoration: new BoxDecoration(
-                          color: Colors.black.withOpacity(0.5)),
-
-                    ),
-                  ),
-                ),
+                // Center(
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Container(
+                //       height: 140.h,
+                //       width: 380.w,
+                //
+                //       decoration: new BoxDecoration(
+                //           color: Colors.black.withOpacity(0.5)),
+                //
+                //     ),
+                //   ),
+                // ),
 
                 Expanded(
                   child: Center(
@@ -371,7 +372,11 @@ class _FeedPage extends ConsumerState<FeedPage> {
                                                       alignment: Alignment.center,
                                                       child: Padding(
                                                         padding: const EdgeInsets.all(8.0),
-                                                        child: FullScreenWidget(
+                                                        child: InkWell(
+                                                          onTap: (){
+                                                            Get.to(()=>PostPage(post, loginUser));
+
+                                                          },
                                                           child: CachedNetworkImage(
                                                             imageUrl: post.imageUrl,
                                                             fit: BoxFit.cover,

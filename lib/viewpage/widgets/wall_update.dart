@@ -21,7 +21,6 @@ class WallUpdate extends  ConsumerStatefulWidget {
 }
 
 class _WallUpdateState extends ConsumerState<WallUpdate> {
-  final _form = GlobalKey<FormState>();
 
   final uid = FirebaseInstances.firebaseAuth.currentUser!.uid;
 
@@ -44,7 +43,6 @@ class _WallUpdateState extends ConsumerState<WallUpdate> {
     });
 
     final image = ref.watch(imageProvider);
-    final wall = ref.watch(wallProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,

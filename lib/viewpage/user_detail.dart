@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,18 +5,12 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:moon_chat/common/snackshow.dart';
 import 'package:moon_chat/services/crud_service.dart';
-import 'package:moon_chat/viewpage/test.dart';
-import 'package:moon_chat/viewpage/widgets/create_post.dart';
-import 'package:moon_chat/viewpage/widgets/update_wallpaper.dart';
+import 'package:moon_chat/viewpage/post_details.dart';
 import 'package:moon_chat/viewpage/widgets/wall_update.dart';
 import '../common/firebase_instances.dart';
-import '../model/post_state.dart';
 import '../providers/room_provider.dart';
-import '../providers/toggleprovider.dart';
-import '../providers/wall_provider.dart';
 import '../services/wall_service.dart';
 import 'chat_page.dart';
 
@@ -38,7 +30,6 @@ class UserDetail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final wallData = ref.watch(wallStream);
-    final image=ref.watch(imageProvider);
     final postData = ref.watch(postStream);
 
 
@@ -150,7 +141,7 @@ class UserDetail extends ConsumerWidget {
                                     child: Container(
                                     child: InkWell(
                                       onTap: (){
-
+                                        Get.to(()=> PostPage(userPost[index], user));
                                       },
                                       child: CachedNetworkImage(
                                       imageUrl: userPost[index].imageUrl, fit: BoxFit.cover,),

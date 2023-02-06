@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import '../../model/post_state.dart';
 import '../../providers/crud_provider.dart';
 import '../../services/crud_service.dart';
@@ -78,6 +79,7 @@ class DetailPage extends ConsumerWidget {
                                               SizedBox(
                                                 height: 5.h,
                                               ),
+                                              Text(e.dateTime,style: TextStyle(color: Colors.white),)
 
 
                                             ],
@@ -139,10 +141,13 @@ class DetailPage extends ConsumerWidget {
                                     return null;
                                   }
                                   else{
+                                    DateTime now = DateTime.now();
+                                    String formattedDate = DateFormat('MMM d, h:mm a').format(now);
                                     ref.read(crudProvider.notifier).addComment(
                                         comments: [...post.comments, Comment(
                                             username: user.firstName!,
-                                            comment: commentController.text.trim()
+                                            comment: commentController.text.trim(),
+                                            dateTime: formattedDate
                                         )],
                                         postId: post.id
                                     );
