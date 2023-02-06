@@ -35,7 +35,8 @@ class WallNotifier extends StateNotifier<CrudState> {
     state = state.copyWith(isLoad: true, errorMessage: '', isSuccess: false);
     final response = await WallService.updateWall(
         wallId: wallId,
-        image: image, imageId: imageId);
+        image: image,
+        imageId: imageId);
     response.fold((l) {
       state = state.copyWith(isLoad: false, errorMessage: l, isSuccess: false);
     }, (r) {

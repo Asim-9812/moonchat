@@ -126,7 +126,7 @@ class LockedPage extends ConsumerWidget {
 
                                   Positioned(
                                     right: 20.w,
-                                    top: 10.h,
+                                    top: 12.h,
                                     child: IconButton(onPressed: () async {
 
                                       final response = await ref.read(roomProvider).roomCreate(data[index]);

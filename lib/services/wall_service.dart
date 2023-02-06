@@ -21,12 +21,12 @@ class WallService {
   }
 
   static List<Wall> getSome(QuerySnapshot querySnapshot){
-    return querySnapshot.docs.map((m) {
-      final wall = m.data() as Map<String, dynamic> ;
+    return querySnapshot.docs.map((e) {
+      final wall = e.data() as Map<String, dynamic> ;
       return Wall(
           imageUrl: wall['imageUrl'],
           userId: wall['userId'],
-          id: m.id,
+          id: e.id,
           imageId: wall['imageId']);
     }).toList();
   }
@@ -54,8 +54,8 @@ class WallService {
 
   static Future<Either<String, bool>> updateWall({
     required String wallId,
-    required XFile? image,
-    required String? imageId
+    required XFile image,
+    required String imageId
   }) async {
     try {
 
@@ -66,7 +66,7 @@ class WallService {
         final newImageId = DateTime.now().toString();
         final ref1 = FirebaseInstances.firebaseStorage.ref().child(
             'wallImage/$newImageId');
-        await ref1.putFile(File(image!.path));
+        await ref1.putFile(File(image.path));
         final url = await ref1.getDownloadURL();
         await wallDb.doc(wallId).update({
               'imageUrl': url,
