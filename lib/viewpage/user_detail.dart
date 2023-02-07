@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,15 +10,22 @@ import 'package:ionicons/ionicons.dart';
 import 'package:moon_chat/common/snackshow.dart';
 import 'package:moon_chat/services/crud_service.dart';
 import 'package:moon_chat/viewpage/post_details.dart';
+import 'package:moon_chat/viewpage/widgets/tranisition.dart';
 import 'package:moon_chat/viewpage/widgets/wall_update.dart';
 import '../common/firebase_instances.dart';
 import '../providers/room_provider.dart';
 import '../services/wall_service.dart';
 import 'chat_page.dart';
+import 'locked_page.dart';
 
 
 
 class UserDetail extends ConsumerWidget {
+
+
+  final _form1 = GlobalKey<FormState>();
+
+  final passwordController = TextEditingController();
 
   final auth = FirebaseInstances.firebaseAuth.currentUser?.uid;
   final uid = FirebaseInstances.firebaseAuth.currentUser!.uid;
@@ -80,12 +89,12 @@ class UserDetail extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(
-                          width: 15.w,
+                          width: 5.w,
                         ),
 
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(user.firstName!,style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 35.sp,fontWeight: FontWeight.bold),),
+                          child: Text(user.firstName!,style: TextStyle(color: Colors.white,fontSize: 35.sp,fontWeight: FontWeight.bold),),
                         )
 
                       ],
@@ -209,12 +218,102 @@ class UserDetail extends ConsumerWidget {
                               child:  Icon(Icons.more_vert_rounded,color: Colors.white,),
                             ),
                           ): InkWell(
-                            onTap: () async {
+                            onTap: () {
+
+                                showDialog(context: context,
+                                builder: (context){
+                                return BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                child: AlertDialog(
+                                backgroundColor: Colors.white.withOpacity(0.2),
+                                content: Container(
+                                decoration: new BoxDecoration(
+                                color: Colors.transparent,),
+                                child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                Form(
+                                key: _form1,
+                                child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                obscureText: true,
+                                controller: passwordController,
+                                validator: (val){
+
+                            if(val!.isEmpty){
+                            return 'Empty';
+                            } else if (val != '1901'){
+                            return 'Wrong Password';
+                            }
+                            return null;
+                            },
+                            style: TextStyle(fontSize: 25.sp ,color: Colors.black,fontWeight: FontWeight.bold),
+
+                            decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            enabledBorder: UnderlineInputBorder(),
+                            focusedBorder: UnderlineInputBorder(),
+                            hintText: 'Password...',
+                            hintStyle: TextStyle(fontSize: 25.sp ,color: Colors.grey,fontWeight: FontWeight.bold)
+                            ),
+
+                            ),
+                            ),
+                            SizedBox(
+                            height: 10.h,
+                            ),
+                            Container(
+                            // color: Colors.blue,
+                            height: 50.h,
+                            width: 200.w,
+                            child: 
+                            Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                            TextButton(
+                            style: TextButton.styleFrom(
+                            backgroundColor: Colors.black,
+
+                            ),
+                            onPressed: () async {
+
+                            FocusScope.of(context).unfocus();
+                            if(_form1.currentState!.validate()){
+                            if(passwordController.text.trim()=='1901'){
+
                             final response = await ref.read(roomProvider).roomCreate(user);
-                            if(response !=null) {
-                              Get.to(() => ChatPage(response, user.metadata!['token'], user.firstName!));
+                            if(response != null){
+                            Navigator.pop(context);
+                            Navigator.push(context,
+                            CupertinoRoute(exitPage: UserDetail(user), enterPage: ChatPage(response, user.metadata!['token'], user.firstName!))
+                            );
+
+                            }
+
+                            passwordController.clear();
+                            }
                             }
                             },
+                            child: Text('Enter',style: TextStyle(color: Colors.white,fontSize: 20.sp,fontWeight: FontWeight.bold))),
+
+
+                            ],
+                            ),
+
+
+                            )
+                            ],
+                            ),
+                            ),
+
+                            ),
+                            );
+                            }
+                            );
+
+
+
+                  },
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Icon(Ionicons.chatbubble_ellipses,color: Colors.white,),

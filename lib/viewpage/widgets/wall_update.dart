@@ -46,28 +46,14 @@ class _WallUpdateState extends ConsumerState<WallUpdate> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        automaticallyImplyLeading: false,
-        leading: InkWell(onTap:(){
-          ref.invalidate(imageProvider);
-          Get.back();
-          }  ,child: Icon(Icons.arrow_back_ios_new,color: Colors.white,size: 20.sp,)),
-        title: Text('Update Page',style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold),),
-      ),
+
 
       body:  WillPopScope(
         onWillPop: () async =>false,
-        child: Stack(
+        child: Column(
           children: [
-
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: image == null ? Image.network(widget.wall.imageUrl,fit: BoxFit.fill,) : Image.file(File(image.path,),fit: BoxFit.cover,),
-              ),
+            SizedBox(
+              height: 50.h,
             ),
 
             Padding(
@@ -80,6 +66,7 @@ class _WallUpdateState extends ConsumerState<WallUpdate> {
                   child: Container(
                     // color: Colors.red,
                     width: 250.w,
+                    // height: 400.h,
                     child: Column(
                       children: [
 
@@ -88,14 +75,18 @@ class _WallUpdateState extends ConsumerState<WallUpdate> {
                             ref.read(imageProvider.notifier).pickAnImage();
                           },
                           child: Container(
-                            color: Colors.white,
-                            child: Icon(Icons.image,size: 80.sp,color: Colors.black,)
+                            height: 400.h,
+                            // color: Colors.white,
+                            child: image == null ? Image.network(widget.wall.imageUrl,fit: BoxFit.cover,) : Image.file(File(image.path,),fit: BoxFit.cover,),
                           ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
                         ),
 
                         TextButton(
                             style: TextButton.styleFrom(
-                                backgroundColor: Colors.black,
+                                backgroundColor: Colors.blueGrey,
                                 foregroundColor: Colors.white
                             ),
                             onPressed: () {
@@ -109,14 +100,22 @@ class _WallUpdateState extends ConsumerState<WallUpdate> {
                                       imageId: widget.wall.imageId).then((value) => ref.invalidate(imageProvider));
 
                                 }
-
-
-
-
-
-
                             },
-                            child: Text('Submit', style: TextStyle(fontSize: 20.sp),)),
+                            child: Text('SET', style: TextStyle(fontSize: 20.sp),)),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3.0),
+                          child: TextButton(
+                              style: TextButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white
+                              ),
+                              onPressed: () {
+                                ref.invalidate(imageProvider);
+                                Get.back();
+                              },
+                              child: Text('CANCEL', style: TextStyle(fontSize: 20.sp),)),
+                        ),
+
 
 
 

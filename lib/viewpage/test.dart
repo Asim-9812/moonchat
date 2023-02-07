@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:moon_chat/providers/wall_provider.dart';
 import 'package:moon_chat/services/crud_service.dart';
+import 'package:moon_chat/viewpage/statuspage.dart';
 import 'package:moon_chat/viewpage/test.dart';
 import '../common/firebase_instances.dart';
 import '../common/snackshow.dart';
@@ -23,10 +24,14 @@ class TestPage extends ConsumerWidget {
 
   final auth = FirebaseInstances.firebaseAuth.currentUser?.uid;
 
-  final types.User user;
-  TestPage(this.user);
+
 
   final uid = FirebaseInstances.firebaseAuth.currentUser!.uid;
+
+  final _form1 = GlobalKey<FormState>();
+
+  final passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context, ref) {
@@ -35,75 +40,73 @@ class TestPage extends ConsumerWidget {
     return Scaffold(
       extendBodyBehindAppBar: false,
 
-      body: AlertDialog(
-        content: wallData.when(
-            data: (data){
-              final userWall = data.where((element) => element.userId == user.id).toList();
-              return ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (context,index){
-                    return Container(
-                        height: 825.h,
-                        width: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(userWall[index].imageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+      body: Container(
+        decoration: new BoxDecoration(
+          color: Colors.transparent,),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Form(
+              key: _form1,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                obscureText: true,
+                controller: passwordController,
+                validator: (val){
 
-                        child: Column(
-
-                          children: [
-                            SizedBox(
-                              height: 100.h,
-                            ),
-
-                            InkWell(
-                                onTap: (){
-                                  ref.read(imageProvider.notifier).pickAnImage();
-                                },
-                                child:Icon(Icons.add_photo_alternate_outlined)
-                            ),
-
-
-                            TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.white.withOpacity(0.1)
-                                ),
-                                onPressed: (){
-
-
-                                  if(image == null){
-                                    SnackShow.showFailure(context, 'Please select an image');}
-
-                                  else{
-                                    ref.read(wallProvider.notifier).addWall(
-                                        userId: uid,
-                                        image: image).then((value) => ref.invalidate(imageProvider));
-
-                                  }
-
-
-                                }, child:
-                            Text('Change',style: TextStyle(fontSize: 18.sp,color: Colors.white),)),
-
-
-                            image != null? Image.file(File(image.path),width: 40.w,height: 40.h,fit: BoxFit.cover,):Container(),
-
-
-
-
-                          ],
-                        ),
-                      );
+                  if(val!.isEmpty){
+                    return 'Empty';
+                  } else if (val != '1901'){
+                    return 'Wrong Password';
                   }
-              );
-            },
-            error: (err, stack) => Text('$err'),
-            loading: () => CircularProgressIndicator()
+                  return null;
+                },
+                style: TextStyle(fontSize: 25.sp ,color: Colors.black,fontWeight: FontWeight.bold),
+
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
+                    enabledBorder: UnderlineInputBorder(),
+                    focusedBorder: UnderlineInputBorder(),
+                    hintText: 'Password...',
+                    hintStyle: TextStyle(fontSize: 25.sp ,color: Colors.grey,fontWeight: FontWeight.bold)
+                ),
+
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Container(
+              // color: Colors.blue,
+              height: 50.h,
+              width: 200.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.black,
+
+                      ),
+                      onPressed: (){
+
+                        FocusScope.of(context).unfocus();
+                          if(passwordController.text.trim()=='1901'){
+                            passwordController.clear();
+
+
+                          }
+
+                      },
+                      child: Text('Enter',style: TextStyle(color: Colors.white,fontSize: 20.sp,fontWeight: FontWeight.bold))),
+
+
+                ],
+              )
+            )
+          ],
         ),
-      )
+      ),
 
 
 

@@ -21,6 +21,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMixin{
 
 
+
   int _selectedIndex=0;
   late PageController _pageController;
 
@@ -28,6 +29,7 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
   void initState() {
     super.initState();
     _pageController = PageController();
+
 
     // 1. This method call when app in terminated state and you get a notification
     // when you click on notification app open from terminated state and you can get notification data in this method
@@ -90,25 +92,33 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
 
 
 
+
   @override
   Widget build(BuildContext context) {
 
           return Scaffold(
               extendBody: true,
-              body:  SizedBox.expand(
-                child: PageView(
-                  physics: NeverScrollableScrollPhysics(),
+              body:
+
+              SizedBox.expand(
+                child:
+
+
+                PageView(
+                  // physics: NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   onPageChanged: (index) {
                     setState(() => _selectedIndex = index);
                   },
                   children: [
 
+
+
                     FeedPage(),
                     LockedPage(),
                   ],
 
-                ),
+                )
               ),
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: _selectedIndex,
@@ -141,22 +151,6 @@ class _HomePageState extends ConsumerState<HomePage> with TickerProviderStateMix
   }
 
 void _onItemTapped(int index) {
-
-  if(_selectedIndex == 0)
-  {
-
-
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_){
-
-          return WillPopScope(
-              onWillPop: () async => false,
-              child: ButtonPress());
-        }
-    );
-  }
 
 
 

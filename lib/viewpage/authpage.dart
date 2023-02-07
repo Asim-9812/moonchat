@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +7,8 @@ import '../providers/auth_provider.dart';
 import '../providers/toggleprovider.dart';
 
 class AuthPage extends ConsumerWidget {
+
+
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -144,7 +144,7 @@ class AuthPage extends ConsumerWidget {
 
 
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           _form.currentState!.save();
                           FocusScope.of(context).unfocus();
                           if(_form.currentState!.validate()) {
@@ -156,16 +156,20 @@ class AuthPage extends ConsumerWidget {
                               else if (image == null) {
                                 SnackShow.showFailure(
                                     context, 'please select an image');
-                              } else {
-                                ref.read(authProvider.notifier).userSignUp(
-                                  username: usernameController.text.trim(),
-                                  email: emailController.text.trim(),
-                                  password: passwordController.text.trim(),
-                                    image: image,
-                                );
-                                Timer(Duration(milliseconds: 500), () {
-                                  ref.invalidate(imageProvider);
-                                });
+                              } else  {
+
+                             ref.read(authProvider.notifier).userSignUp(
+                                username: usernameController.text.trim(),
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                                image: image,
+                              ).then((value) =>  ref.invalidate(imageProvider));
+
+
+
+                                
+
+
 
                               }
 

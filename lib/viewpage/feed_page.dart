@@ -77,11 +77,11 @@ class _FeedPage extends ConsumerState<FeedPage> {
     );
 
     return Scaffold(
-      // extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.black38,
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         elevation: 0,
         leading:
         Padding(

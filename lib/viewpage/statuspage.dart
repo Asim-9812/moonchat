@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../model/post_state.dart';
 import '../providers/auth_provider.dart';
 import 'authpage.dart';
 import 'homepage.dart';
@@ -22,6 +21,8 @@ class StatusPage extends ConsumerWidget {
           },
           error: (err,stack)=> Text('$err'),
           loading: ()=>CircularProgressIndicator()),
+
+
     );
   }
 }
