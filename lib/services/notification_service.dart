@@ -1,8 +1,6 @@
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:moon_chat/main.dart';
-
 
 
 
@@ -21,13 +19,13 @@ class LocalNotificationService{
         ),
       );
 
-      await flutterLocalNotificationsPlugin.show(
-        id,
-        message.notification!.title,
-        message.notification!.body,
-        notificationDetails,
-        payload: message.data['_id'],
-      );
+      // await flutterLocalNotificationsPlugin.show(
+      //   id,
+      //   message.notification!.title,
+      //   message.notification!.body,
+      //   notificationDetails,
+      //   payload: message.data['_id'],
+      // );
     } on Exception catch (e) {
       print(e);
     }

@@ -68,6 +68,27 @@ class Post{
 
 }
 
+class Notes{
+  final String id;
+  final String userName;
+  final String notes;
+  final String userId;
+  final String dateTime;
+  final Like like;
+
+
+  Notes({
+    required this.like,
+    required this.userId,
+    required this.notes,
+    required this.dateTime,
+    required this.id,
+    required this.userName
+  });
+
+}
+
+
 class Wall{
   final String id;
   late final String imageUrl;

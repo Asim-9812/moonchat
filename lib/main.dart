@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:moon_chat/model/post_state.dart';
-import 'package:moon_chat/viewpage/statuspage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:moon_chat/viewpage/test.dart';
-import 'package:moon_chat/viewpage/widgets/lock_app.dart';
 import 'firebase_options.dart';
+import 'package:moon_chat/viewpage/widgets/auth_screen.dart';
 
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -54,7 +51,7 @@ void main() async {
       ?.createNotificationChannel(channel);
   flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    
+
   );
 
 
@@ -78,7 +75,7 @@ class Home extends StatelessWidget {
           home: child,
         );
       },
-      child: LockApp(),
+      child: AuthScreen(),
     );
   }
 }

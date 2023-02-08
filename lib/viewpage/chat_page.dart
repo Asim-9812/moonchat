@@ -6,6 +6,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moon_chat/common/firebase_instances.dart';
 import 'package:moon_chat/providers/room_provider.dart';
@@ -25,7 +26,11 @@ ChatPage(this.room, this.token,this.username);
       extendBodyBehindAppBar: true,
       appBar:AppBar(
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: true,
+        leading: InkWell(
+            onTap: (){
+              Get.back();
+            },
+            child: Icon(Icons.arrow_back_ios_new,color: Colors.white,))
       ),
       body: Stack(
         children: [

@@ -2,13 +2,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:moon_chat/main.dart';
 import 'package:moon_chat/viewpage/locked_page.dart';
 import 'package:moon_chat/viewpage/feed_page.dart';
-import 'package:moon_chat/viewpage/widgets/lock_chat.dart';
-
-import '../model/post_state.dart';
 import '../services/notification_service.dart';
 
 class HomePage extends ConsumerStatefulWidget {
