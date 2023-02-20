@@ -69,23 +69,31 @@ class _PostPageState extends ConsumerState<PostPage> {
                 children: [
                   Text(widget.post.caption,style: TextStyle(color: Colors.white,fontSize:30.sp,fontStyle: FontStyle.italic,fontWeight: FontWeight.bold),),
 
-                  IconButton(
-                      onPressed: (){
-                        if(widget.post.like.usernames.contains(userName)){
-                          SnackShow.showFailure(context, 'You have already like this post');
-                        }else{
-                          ref.read(loginProvider.notifier).change();
-                          widget.post.like.usernames.add(userName);
-                          ref.read(crudProvider.notifier).addLike(
-                              username: widget.post.like.usernames,
-                              like: widget.post.like.likes,
-                              postId: widget.post.id
-                          );
-                        }
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                            onPressed: (){
+                              if(widget.post.like.usernames.contains(userName)){
+                                SnackShow.showFailure(context, 'You have already like this post');
+                              }else{
+                                ref.read(loginProvider.notifier).change();
+                                widget.post.like.usernames.add(userName);
+                                ref.read(crudProvider.notifier).addLike(
+                                    username: widget.post.like.usernames,
+                                    like: widget.post.like.likes,
+                                    postId: widget.post.id
+                                );
+                              }
 
-                      }, icon: widget.post.like.likes==2? Icon(Ionicons.heart,color: Colors.blueAccent,size:30.sp,):
-                  widget.post.like.likes==1? Icon(Ionicons.heart_half_outline,color: Colors.blueAccent,size:30.sp):
-                  Icon(Ionicons.heart_outline,color: Colors.blueAccent,size:30.sp)),
+                            }, icon: widget.post.like.likes!=0? Icon(Ionicons.heart,color: Colors.blueAccent,size:30.sp,):
+                        Icon(Ionicons.heart_outline,color: Colors.blueAccent,size:30.sp)),
+                        if(widget.post.like.likes != 0)    Text('${widget.post.like.likes}')
+
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

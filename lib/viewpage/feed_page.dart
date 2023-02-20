@@ -396,23 +396,30 @@ class _FeedPage extends ConsumerState<FeedPage> {
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                       children: [
-                                                        IconButton(
-                                                            onPressed: (){
-                                                              if(post.like.usernames.contains(userName)){
-                                                                SnackShow.showFailure(context, 'You have already like this post');
-                                                              }else{
-                                                                ref.read(loginProvider.notifier).change();
-                                                                post.like.usernames.add(userName);
-                                                                ref.read(crudProvider.notifier).addLike(
-                                                                    username: post.like.usernames,
-                                                                    like: post.like.likes,
-                                                                    postId: post.id
-                                                                );
-                                                              }
+                                                        Row(
+                                                          children: [
+                                                            IconButton(
+                                                                onPressed: (){
+                                                                  if(post.like.usernames.contains(userName)){
+                                                                    SnackShow.showFailure(context, 'You have already like this post');
+                                                                  }else{
+                                                                    ref.read(loginProvider.notifier).change();
+                                                                    post.like.usernames.add(userName);
+                                                                    ref.read(crudProvider.notifier).addLike(
+                                                                        username: post.like.usernames,
+                                                                        like: post.like.likes,
+                                                                        postId: post.id
+                                                                    );
+                                                                  }
 
-                                                            }, icon: post.like.likes==2? Icon(Ionicons.heart,color: Colors.purple,):
-                                                        post.like.likes==1? Icon(Ionicons.heart_half_outline,color: Colors.purple):
-                                                        Icon(Ionicons.heart_outline,color: Colors.purple)),
+                                                                }, icon:
+                                                            post.like.likes != 0?
+                                                            Icon(Ionicons.heart,color: Colors.purple,):
+                                                            Icon(Ionicons.heart_outline,color: Colors.purple)
+                                                            ),
+                                                            if(post.like.likes != 0)    Text('${post.like.likes}')
+                                                          ],
+                                                        ),
 
                                                         IconButton(onPressed: (){
 

@@ -12,6 +12,9 @@ import 'package:moon_chat/common/firebase_instances.dart';
 import 'package:moon_chat/providers/room_provider.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:dio/dio.dart';
+import 'package:moon_chat/viewpage/locked_page.dart';
+
+import 'homepage.dart';
 
 class ChatPage extends ConsumerWidget{
 final types.Room room;
@@ -28,7 +31,7 @@ ChatPage(this.room, this.token,this.username);
         backgroundColor: Colors.transparent,
         leading: InkWell(
             onTap: (){
-              Get.back();
+              Get.to(()=> HomePage());
             },
             child: Icon(Icons.arrow_back_ios_new,color: Colors.white,))
       ),
