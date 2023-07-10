@@ -44,210 +44,174 @@ class UserDetail extends ConsumerWidget {
 
     return Scaffold(
       // extendBodyBehindAppBar: true,
-      body:wallData.when(
-          data: (data){
+      backgroundColor: Colors.black,
+      body:
 
-            final userWall = data.where((element) => element.userId == user.id).toList();
 
-            return ListView.builder(
-                itemCount: 1,
-                itemBuilder: (context,index){
-                  final wall = userWall[0];
-                  return Stack(
-                      children:[
 
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            height: 820.h,
-                            width: 390.w,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(userWall[0].imageUrl),
-                                fit: BoxFit.cover,
-                              ),
+
+        SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+
+              children: [
+                Container(
+                  // decoration: new BoxDecoration(
+                  //     color: Colors.black.withOpacity(0.7)),
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Get.back();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.arrow_back_ios_new, color: Colors.white,),
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
 
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(user.firstName!,style: TextStyle(color: Colors.white,fontSize: 25.sp,fontWeight: FontWeight.bold),),
+                          )
 
-                        Container(
-                          // decoration: new BoxDecoration(
-                          //     color: Colors.black.withOpacity(0.7)),
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      Get.back();
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(Icons.arrow_back_ios_new, color: Colors.white,),
+                        ],
+                      ),
+                      auth==user.id? InkWell(
+                        onTap: (){ showDialog(
+                            context: context,
+                            builder: (context){
+                              return AlertDialog(
+                                backgroundColor: Colors.black,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    InkWell(
+                                        onTap: (){
+                                          Navigator.pop(context);
+                                          SnackShow.showFailure(context, 'Coming soon...');
+                                        },
+                                        child: Text('Change Profile Picture',style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold),)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: Divider(
+                                        thickness: 1,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(user.firstName!,style: TextStyle(color: Colors.white,fontSize: 25.sp,fontWeight: FontWeight.bold),),
-                                  )
+                                    InkWell(
+                                        onTap: (){
+                                          Navigator.pop(context);
+                                          SnackShow.showFailure(context, 'Coming soon...');
+                                        },
+                                        child: Text('Change Wallpaper',style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold),)),
 
-                                ],
-                              ),
-                              auth==user.id? InkWell(
-                                onTap: (){ showDialog(
-                                    context: context,
-                                    builder: (context){
-                                      return AlertDialog(
-                                        backgroundColor: Colors.black,
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            InkWell(
-                                                onTap: (){
-                                                  Navigator.pop(context);
-                                                  SnackShow.showFailure(context, 'Coming soon...');
-                                                },
-                                                child: Text('Change Profile Picture',style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold),)),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                              child: Divider(
-                                                thickness: 1,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-
-                                            InkWell(
-                                                onTap:(){
-
-                                                  Navigator.pop(context);
-                                                  Get.to(()=>WallUpdate(wall));
-
-                                                },
-                                                child: Text('Change Wallpaper',style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold),)),
-
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                );
-
-                                },
-
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child:  Icon(Icons.more_vert_rounded,color: Colors.white,),
+                                  ],
                                 ),
-                              ): InkWell(
-                                onTap: () async {
+                              );
+                            }
+                        );
+
+                        },
+
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child:  Icon(Icons.more_vert_rounded,color: Colors.white,),
+                        ),
+                      ): InkWell(
+                        onTap: () async {
 
 
-                                  final response = await ref.read(roomProvider).roomCreate(user);
-                                  if(response != null){
-                                    Navigator.pop(context);
-                                    Navigator.push(context,
-                                        CupertinoRoute(exitPage: UserDetail(user), enterPage: ChatPage(response, user.metadata!['token'], user.firstName!))
-                                    );
+                          final response = await ref.read(roomProvider).roomCreate(user);
+                          if(response != null){
+                            Navigator.pop(context);
+                            Navigator.push(context,
+                                CupertinoRoute(exitPage: UserDetail(user), enterPage: ChatPage(response, user.metadata!['token'], user.firstName!))
+                            );
 
-                                  }
+                          }
 
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Icon(Ionicons.chatbubble_ellipses,color: Colors.white,),
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Icon(Ionicons.chatbubble_ellipses,color: Colors.white,),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+
+
+                SizedBox(
+                  height: 70.h,
+                ),
+                Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 60,
+                        backgroundImage: NetworkImage(user.imageUrl!),
+                      ),
+                      SizedBox(height: 10.h,),
+                    ],
+                  ),
+                ),
+
+
+                Container(
+                  // color: Colors.red,
+                  height: 600.h,
+                  width: double.infinity,
+                  child: postData.when(
+                      data: (data){
+                        final userPost = data.where((element) => element.userId == user.id).toList();
+                        return GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: userPost.length,
+                            padding: EdgeInsets.only(top: 15.h),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                            itemBuilder: (context, index){
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      child: InkWell(
+                                        onTap: (){
+                                          Get.to(()=> PostPage(userPost[index], user));
+                                        },
+                                        child: CachedNetworkImage(
+                                          imageUrl: userPost[index].imageUrl, fit: BoxFit.cover,),
+                                      ),
+
+                                    )
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-
-
-
-
-                        Column(
-
-                          children: [
-
-
-
-                            SizedBox(
-                              height: 70.h,
-                            ),
-                            Container(
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 60,
-                                    backgroundImage: NetworkImage(user.imageUrl!),
-                                  ),
-                                  SizedBox(height: 10.h,),
-                                ],
-                              ),
-                            ),
-
-
-                            Container(
-                              // color: Colors.red,
-                              height: 600.h,
-                              width: double.infinity,
-                              child: postData.when(
-                                  data: (data){
-                                    final userPost = data.where((element) => element.userId == user.id).toList();
-                                    return GridView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: userPost.length,
-                                        padding: EdgeInsets.only(top: 15.h),
-                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                                        itemBuilder: (context, index){
-                                          return Padding(
-                                            padding: const EdgeInsets.all(2.0),
-                                            child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(10),
-                                                child: Container(
-                                                  child: InkWell(
-                                                    onTap: (){
-                                                      Get.to(()=> PostPage(userPost[index], user));
-                                                    },
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: userPost[index].imageUrl, fit: BoxFit.cover,),
-                                                  ),
-
-                                                )
-                                            ),
-                                          );
-                                        }
-                                    );
-                                  },
-                                  error: (err, stack) => Text('$err'),
-                                  loading: () => CircularProgressIndicator()
-                              ),
-                            )
-                          ],
-                        ),
-
-
-
-
-
-                      ]);
-                }
-            );
-
-          },
-          error: (err, stack) => Text('$err'),
-          loading: () => CircularProgressIndicator()),
-
+                              );
+                            }
+                        );
+                      },
+                      error: (err, stack) => Text('$err'),
+                      loading: () => CircularProgressIndicator()
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
 
 
 

@@ -16,19 +16,26 @@ import '../../model/post_state.dart';
 
 
 
-class AddNotes extends ConsumerWidget {
+class AddNotes extends ConsumerStatefulWidget {
 
   final types.User user;
   AddNotes(this.user);
 
+  @override
+  ConsumerState<AddNotes> createState() => _AddNotesState();
+}
+
+class _AddNotesState extends ConsumerState<AddNotes> {
   final _form = GlobalKey<FormState>();
 
-  final noteController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+
   final uid = FirebaseInstances.firebaseAuth.currentUser!.uid;
+
   final username = FirebaseInstances.firebaseAuth.currentUser!.displayName;
 
   @override
-  Widget build(BuildContext context,ref) {
+  Widget build(BuildContext context) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: AlertDialog(
@@ -77,7 +84,7 @@ class AddNotes extends ConsumerWidget {
                     ref.read(noteProvider.notifier).addNote(
                         notes: noteController.text.trim(),
                         userId: uid,
-                        userName: user.firstName!,
+                        userName: widget.user.firstName!,
                         dateTime: formattedDate
                     ).then((value) => Navigator.pop(context));
 

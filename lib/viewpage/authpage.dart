@@ -6,23 +6,34 @@ import '../common/snackshow.dart';
 import '../providers/auth_provider.dart';
 import '../providers/toggleprovider.dart';
 
-class AuthPage extends ConsumerWidget {
+class AuthPage extends ConsumerStatefulWidget {
 
 
-  final usernameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  @override
+  ConsumerState<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends ConsumerState<AuthPage> {
+
+  TextEditingController testController = TextEditingController();
+
+  TextEditingController usernameController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+
+  TextEditingController passwordController = TextEditingController();
 
   final _form = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context,ref) {
+  Widget build(BuildContext context) {
 
     final isLogin = ref.watch(loginProvider);
     final image = ref.watch(imageProvider);
     final auth =ref.watch(authProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             Center(
@@ -143,6 +154,7 @@ class AuthPage extends ConsumerWidget {
 
 
 
+
                       InkWell(
                         onTap: () {
                           _form.currentState!.save();
@@ -167,7 +179,7 @@ class AuthPage extends ConsumerWidget {
 
 
 
-                                
+
 
 
 

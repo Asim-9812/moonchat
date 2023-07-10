@@ -4,7 +4,7 @@
 
 
    <application
-        android:label="달빛"
+        android:label="MoonChat"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

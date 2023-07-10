@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:moon_chat/providers/note_provider.dart';
 import 'package:moon_chat/services/note_service.dart';
+import 'package:moon_chat/viewpage/statuspage.dart';
 import 'package:moon_chat/viewpage/user_detail.dart';
 import 'package:moon_chat/viewpage/widgets/add_notes.dart';
 import 'package:moon_chat/viewpage/widgets/tranisition.dart';
@@ -75,8 +76,7 @@ class LockedPage extends ConsumerWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   TextButton(onPressed: (){
-                                    ref.read(authProvider.notifier).userLogOut();
-                                    Navigator.pop(context);
+                                    ref.read(authProvider.notifier).userLogOut().then((value) => Get.offAll(()=>StatusPage()));
                                   }, child: Text('Yes',style: TextStyle(color: Colors.purple)),),
                                   TextButton(onPressed: () {
                                     Navigator.pop(context);
